@@ -20,6 +20,9 @@ class EvaluationAPIView(APIView):
 
     def post(self, request):
         data = request.data
+        rating = data.get("rating")
+        if int(rating) > 5 or int(rating) < 0:
+            return JsonResponse({"message": "Rating should between 1 and 5"}, status=status.HTTP_400_BAD_REQUEST)
         serializer = EvaluationSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
